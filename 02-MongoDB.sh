@@ -1,4 +1,4 @@
- cp  mongodb.repo /etc/yum.repos.d/mongo.repo
+ cp  Mongodb.repo /etc/yum.repos.d/mongo.repo
 
  yum install mongodb-org -y
 # Need to Update  listen address from 127.0.0.1 to 0.0.0.0 in
