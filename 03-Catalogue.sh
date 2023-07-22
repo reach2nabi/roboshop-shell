@@ -16,7 +16,6 @@ unzip /tmp/catalogue.zip
 
 cd /app
 npm install
-systemctl daemon-reload
 
 yum install mongodb-org-shell -y
 mongo --host mongodb.ndevops.online </app/schema/catalogue.js
