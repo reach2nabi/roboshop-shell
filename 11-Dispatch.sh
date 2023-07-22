@@ -2,6 +2,9 @@ cp dispatch.service
 
 yum install golang -y
 useradd roboshop
+
+rm -rf /app
+
 mkdir /app
 
 curl -L -o /tmp/dispatch.zip https://roboshop-artifacts.s3.amazonaws.com/dispatch.zip
