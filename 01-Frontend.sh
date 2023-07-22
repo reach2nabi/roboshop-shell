@@ -1,4 +1,4 @@
-cp nginx-roboshop.conf /ect/nginx/default.d/roboshop.conf
+cp nginx-roboshop.conf /etc/nginx/default.d/roboshop.conf
 
 yum install nginx -y
 
