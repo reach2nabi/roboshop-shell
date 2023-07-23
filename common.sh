@@ -1,3 +1,4 @@
+log=&>>/tmp/roboshop.log
 
 func_nodejs(){
 echo -e "\e[31m>>>>>>>>>> Nodejs File Content<<<<<<<<<<\e[0m"
