@@ -1,6 +1,6 @@
 log = &>>/tmp/roboshop.log
 
-fun_nodejs(){
+func_nodejs(){
 echo -e "\e[31m>>>>>>>>>> Nodejs File Content<<<<<<<<<<\e[0m"
 cp ${component}.service /etc/systemd/system/${component}.service ${log}
 cp mongo.conf /etc/yum.repos.d/mongo.repo ${log}
