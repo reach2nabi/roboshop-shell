@@ -60,33 +60,32 @@ systemctl restart ${component} &>>${log}
 func_java(){
   
 echo -e "\e[31m>>>>>>>>>>  Install java    <<<<<<<<<<\e[0m"  
-yum install maven -y
+yum install maven -y &>>${log}
 
 func_appprereq
 
 echo -e "\e[31m>>>>>>>>>>  Install dependent packages    <<<<<<<<<<\e[0m"  
-mvn clean package
-mv target/${component}-1.0.jar ${component}.jar
+mvn clean package &>>${log}
+mv target/${component}-1.0.jar ${component}.jar &>>${log}
 
 echo -e "\e[31m>>>>>>>>>>  Install mysql    <<<<<<<<<<\e[0m"  
-yum install mysql -y
+yum install mysql -y &>>${log}
 
 echo -e "\e[31m>>>>>>>>>>  Install Schema    <<<<<<<<<<\e[0m"  
-mysql -h mysql.ndevops.online -uroot -pRoboShop@1 < /app/schema/${component}.sql
+mysql -h mysql.ndevops.online -uroot -pRoboShop@1 < /app/schema/${component}.sql &>>${log}
 
 func_systemd
 }
 
 func_python(){
   echo -e "\e[31m>>>>>>>>>>  Install Python    <<<<<<<<<<\e[0m"
-  yum install python36 gcc python3-devel -y
+  yum install python36 gcc python3-devel -y &>>${log}
   func_appprereq
 
   echo -e "\e[31m>>>>>>>>>>  Build Service     <<<<<<<<<<\e[0m"
-  pip3.6 install -r requirements.txt
+  pip3.6 install -r requirements.txt &>>${log}
   
   func_systemd
-  
-  
+
   
 }
