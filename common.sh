@@ -1,33 +1,5 @@
 log=/tmp/roboshop.log
 
-func_nodejs(){
-echo -e "\e[31m>>>>>>>>>> Nodejs File Content<<<<<<<<<<\e[0m"
-cp mongo.conf /etc/yum.repos.d/mongo.repo &>>${log}
-echo $?
-
-echo -e "\e[32m>>>>>>>>>> Nodejs File Content<<<<<<<<<<\e[0m"
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
-echo $?
-
-echo -e "\e[33m>>>>>>>>>> Install Nodejs File Content<<<<<<<<<<\e[0m"
-yum install nodejs -y &>>${log}
-echo $?
-
-echo -e "\e[34m>>>>>>>>>> Install dependent files  <<<<<<<<<<\e[0m"
-npm install &>>${log}
-echo $?
-
-echo -e "\e[35m>>>>>>>>>> Install mongodb  <<<<<<<<<<\e[0m"
-yum install mongodb-org-shell -y &>>${log}
-echo $?
-
-echo -e "\e[36m>>>>>>>>>> Create mongodb Schema   <<<<<<<<<<\e[0m"
-mongo --host mongodb.ndevops.online </app/schema/${component}.js &>>${log}
-echo $?
-
-func_systemd
-}
-
 func_appprereq(){
   cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
@@ -59,12 +31,56 @@ func_appprereq(){
 }
 
 
+func_schema_setup(){
+ if["${schema_type}"=="mongodb"]; then
+   echo -e "\e[35m>>>>>>>>>> Install mongodb  <<<<<<<<<<\e[0m"
+   yum install mongodb-org-shell -y &>>${log}
+   echo $?
+
+   echo -e "\e[36m>>>>>>>>>> Create mongodb Schema   <<<<<<<<<<\e[0m"
+   mongo --host mongodb.ndevops.online </app/schema/${component}.js &>>${log}
+   echo $?
+ fi
+
+ if["${schema_type}"=="mysql"];then
+  echo -e "\e[31m>>>>>>>>>>  Install mysql    <<<<<<<<<<\e[0m"
+  yum install mysql -y &>>${log}
+  echo $?
+
+  echo -e "\e[31m>>>>>>>>>>  Install Schema    <<<<<<<<<<\e[0m"
+  mysql -h mysql.ndevops.online -uroot -pRoboShop@1 < /app/schema/${component}.sql &>>${log}
+  echo $?
+fi
+
+}
+
 func_systemd(){
-echo -e "\e[31m>>>>>>>>>> Enable an Restart   <<<<<<<<<<\e[0m"  
+echo -e "\e[31m>>>>>>>>>> Enable an Restart   <<<<<<<<<<\e[0m"
 systemctl daemon-reload &>>${log}
 systemctl enable ${component} &>>${log}
 systemctl restart ${component} &>>${log}
 echo $?
+}
+
+
+func_nodejs(){
+echo -e "\e[31m>>>>>>>>>> Nodejs File Content<<<<<<<<<<\e[0m"
+cp mongo.conf /etc/yum.repos.d/mongo.repo &>>${log}
+echo $?
+func_appprereq
+echo -e "\e[32m>>>>>>>>>> Nodejs File Content<<<<<<<<<<\e[0m"
+curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
+echo $?
+
+echo -e "\e[33m>>>>>>>>>> Install Nodejs File Content<<<<<<<<<<\e[0m"
+yum install nodejs -y &>>${log}
+echo $?
+
+echo -e "\e[34m>>>>>>>>>> Install dependent files  <<<<<<<<<<\e[0m"
+npm install &>>${log}
+echo $?
+func_schema_setup
+func_systemd
 }
 
 func_java(){
@@ -79,16 +95,10 @@ mvn clean package &>>${log}
 mv target/${component}-1.0.jar ${component}.jar &>>${log}
 echo $?
 
-echo -e "\e[31m>>>>>>>>>>  Install mysql    <<<<<<<<<<\e[0m"  
-yum install mysql -y &>>${log}
-echo $?
-
-echo -e "\e[31m>>>>>>>>>>  Install Schema    <<<<<<<<<<\e[0m"  
-mysql -h mysql.ndevops.online -uroot -pRoboShop@1 < /app/schema/${component}.sql &>>${log}
-echo $?
-
+func_schema_setup
 func_systemd
 }
+
 
 func_python(){
   echo -e "\e[31m>>>>>>>>>>  Install Python    <<<<<<<<<<\e[0m"
@@ -101,5 +111,4 @@ func_python(){
   echo $?
   func_systemd
 
-  
 }
