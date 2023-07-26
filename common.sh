@@ -18,7 +18,7 @@ func_appprereq(){
     echo -e "\e[34m>>>>> User already Exist"
   else
      useradd roboshop &>>${log}
-  if
+  fi
   func_exit_status
 
   echo -e "\e[35m>>>>>>>>>> Remove previous file from the application  <<<<<<<<<<\e[0m"
