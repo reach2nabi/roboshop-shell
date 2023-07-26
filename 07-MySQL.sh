@@ -1,5 +1,5 @@
 cp mysql.repo /etc/yum.repos.d/mysql.repo
-mysql_password =$1
+mysql_password=$1
 if[-z "{mysql_password}"]; then
   echo Input password is missing
   exit 1
