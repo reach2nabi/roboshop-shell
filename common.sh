@@ -44,14 +44,14 @@ func_appprereq(){
 }
 
 func_schema_setup(){
- if["${schema_type}"=="mongodb"]; then
+ if[ "${schema_type}" == "mongodb"]; then
    echo -e "\e[35m>>>>>>>>>> Install mongodb  <<<<<<<<<<\e[0m"
    yum install mongodb-org-shell -y &>>${log}
     func_exit_status
 
    echo -e "\e[36m>>>>>>>>>> Create mongodb Schema   <<<<<<<<<<\e[0m"
    mongo --host mongodb.ndevops.online </app/schema/${component}.js &>>${log}
-    func_exit_status
+   func_exit_status
  fi
 
  if["${schema_type}"=="mysql"];then
