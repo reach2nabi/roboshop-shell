@@ -117,7 +117,7 @@ func_python(){
   yum install python36 gcc python3-devel -y &>>${log}
    func_exit_status
   func_appprereq
-
+  sed -i "/s/rabbitmq_password/${rabbitmq_password}" /etc/systemd/system/${component}.service
   echo -e "\e[31m>>>>>>>>>>  Build Service     <<<<<<<<<<\e[0m"
   pip3.6 install -r requirements.txt &>>${log}
    func_exit_status
