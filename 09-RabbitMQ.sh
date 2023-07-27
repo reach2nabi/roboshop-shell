@@ -13,9 +13,12 @@ curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/sc
 echo -e "\e[34m>>>>>>>>>> Installing Rabbitmq Service <<<<<<<<<<\e[0m"
 yum install rabbitmq-server -y
 
-systemctl enable rabbitmq-server
-systemctl start rabbitmq-server
 
-rabbitmqctl add_user roboshop ${rabbitmq_password}
+ if [ $? -ne 0 ]; then
+     rabbitmqctl add_user roboshop ${rabbitmq_password}
+  fi
+
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
 
+systemctl enable rabbitmq-server
+systemctl restart rabbitmq-server
