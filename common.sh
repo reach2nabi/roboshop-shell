@@ -15,7 +15,7 @@ func_appprereq(){
   func_exit_status
 
   echo -e "\e[34m>>>>>>>>>> Useradd to Service <<<<<<<<<<\e[0m"
-  if [ $? -eq 0 ]; then
+  if [ $? -ne 0 ]; then
     echo -e "\e[34m>>>>> User already Exist"
   else
      useradd roboshop &>>${log}
